@@ -117,10 +117,10 @@ int main(int argc, char **argv)
                     highestRated[i - 2] = item;
                     max = item.rating;
                 }
-                // else if (item.rating == max && item < highestRated.at(i - 2))
-                // {
-                //     highestRated[i - 2] = item;
-                // }
+                else if (item.rating == max && item < highestRated[i-2])
+                {
+                    highestRated[i - 2] = item;
+                }
             }
         }
         // for (auto mov : prefix)

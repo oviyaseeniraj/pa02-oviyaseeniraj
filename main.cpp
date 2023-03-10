@@ -111,7 +111,6 @@ int main(int argc, char **argv)
             {
                 // prefix.insert(Movies::reverseMovie(item.name, item.rating));
                 prefix.push(Movies::reverseMovie(item.name, item.rating));
-                highestRated.push_back(Movies::Movie("", 0.0));
                 if (item.rating > max)
                 {
                     highestRated[i - 2] = item;

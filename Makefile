@@ -13,7 +13,7 @@
 
 CXX = g++
 
-CXXFLAGS= -std=c++11 -g -Wall Wno-uninitialized
+CXXFLAGS= -std=c++11 -g -Wall -Wno-uninitialized
 
 
 OBJECTFILES = main.o movies.o

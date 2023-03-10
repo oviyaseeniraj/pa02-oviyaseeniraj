@@ -1,4 +1,4 @@
-#MAKEFILE
+# MAKEFILE
 
 # CXXFLAGS: -std=c++11 -g -Wall -Wno -uninitialized
 
@@ -13,7 +13,7 @@
 
 CXX = g++
 
-CXXFLAGS= -std=c++11 -g -Wall -Wno-uninitialized
+CXXFLAGS= -Wall -Wno-uninitialized #-DWITHOUT_NUMPY -I/usr/local/include/python3.10 -lpython3.10
 
 
 OBJECTFILES = main.o movies.o

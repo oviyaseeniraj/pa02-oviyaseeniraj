@@ -103,14 +103,13 @@ int main(int argc, char **argv)
     {
         double max = -42;
         multiset<Movies::reverseMovie> prefix;
-        string empty = "";
-        string prefix1 = empty.append(argv[i]);
+        string prefix1 = argv[i];
         for (auto item : allMovies)
         {
-            highestRated.push_back(Movies::Movie("", 0.0));
-            if (item.name.substr(0, prefix1.length()) == prefix1)
+            if (item.name.length() >= prefix1.length() && item.name.substr(0, prefix1.length()) == prefix1)
             {
                 prefix.insert(Movies::reverseMovie(item.name, item.rating));
+                highestRated.push_back(Movies::Movie("", 0.0));
                 if (item.rating > max)
                 {
                     highestRated.at(i - 2) = item;

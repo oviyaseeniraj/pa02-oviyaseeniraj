@@ -90,7 +90,7 @@ int main(int argc, char **argv)
         // print all the movies in ascending alphabetical order of movie names
         for (auto mov : allMovies)
         {
-            cout << mov.name << ", " << mov.rating << endl;
+            cout << mov.name << ", " << std::fixed << std::setprecision(1) << mov.rating << endl;
         }
         return 0;
     }

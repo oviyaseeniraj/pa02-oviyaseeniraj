@@ -45,7 +45,11 @@ bool operator>(Movies::reverseMovie const &m1, Movies::reverseMovie const &m2)
 
 bool operator<(Movies::reverseMovie const &m1, Movies::reverseMovie const &m2)
 {
-    return (m1.rating < m2.rating);
+    if (m1.rating == m2.rating)
+    {
+        return m1.name > m2.name;
+    }
+    return m1.rating < m2.rating;
 }
 
 int main(int argc, char **argv)
@@ -116,7 +120,7 @@ int main(int argc, char **argv)
                     highestRated[i - 2] = item;
                     max = item.rating;
                 }
-                else if (item.rating == max && item < highestRated[i-2])
+                else if (item.rating == max && item < highestRated[i - 2])
                 {
                     highestRated[i - 2] = item;
                 }

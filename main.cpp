@@ -107,13 +107,11 @@ int main(int argc, char **argv)
     for (int i = 2; i < argc; i++)
     {
         double max = -42;
-        // multiset<Movies::reverseMovie> prefix;
         string prefix1 = argv[i];
         for (auto item : allMovies)
         {
             if (item.name.length() >= prefix1.length() && item.name.substr(0, prefix1.length()) == prefix1)
             {
-                // prefix.insert(Movies::reverseMovie(item.name, item.rating));
                 prefix.push(Movies::reverseMovie(item.name, item.rating));
                 if (item.rating > max)
                 {
@@ -126,10 +124,6 @@ int main(int argc, char **argv)
                 }
             }
         }
-        // for (auto mov : prefix)
-        // {
-        //     cout << mov.name << ", " << std::fixed << std::setprecision(1) << mov.rating << endl;
-        // }
 
         if (prefix.empty())
         {
@@ -148,6 +142,9 @@ int main(int argc, char **argv)
         cout << endl;
     }
 
+
+    //  For each prefix,
+    //  Print the highest rated movie with that prefix if it exists.
     for (int i = 0; i < argc - 2; i++)
     {
         if (highestRated[i].name != "")
@@ -155,13 +152,10 @@ int main(int argc, char **argv)
             cout << "Best movie with prefix "
                  << argv[i + 2]
                  << " is: "
-                 << highestRated.at(i).name
+                 << highestRated[i].name
                  << " with rating " << std::fixed << std::setprecision(1) << highestRated[i].rating << endl;
         }
     }
-
-    //  For each prefix,
-    //  Print the highest rated movie with that prefix if it exists.
 
     return 0;
 }
@@ -170,35 +164,43 @@ int main(int argc, char **argv)
 
 /*  === PART 3A: TIME COMPLEXITY ANALYSIS ===
 
-    In part 2, the worst case time complexity of my algorithm was O(n*m*log(n)), where m is the number of prefixes and n is the number of movies.
+    In part 2, the worst case time complexity of my algorithm was O(n*m*log(k)), where m is the number of prefixes, n is the number of movies, and k is the maximum number of movies that begin with each prefix.
         To break down this conclusion, I will present an explanation of my code.
         1. To begin with, I wrote an outer for loop that iterated over the prefixes, which was m times, with a worst case time complexity of O(m).
             Current total worst case time complexity: O(m).
         2. I then wrote an inner for loop of movie iterations, which happened n times, giving me a worst case time complexity of O(n).
             Current total worst case time complexity: O(m) * O(n) = O(m*n).
-        3. I then use an insertion operation of movies into a multiset, which has a worst case time complexity of  O(log n).
-            Current total worst case time complexity: O(m) * O(n) * O (log n) = O(m*n*log(n))
-        4. I compare strings a maximum of m times when printing the highest rated movie, which has a worst case time complexity of O(m).
-            Current total worst case time complexity: O(m) * O(n) * O (log n) + O (m) = O(m*n*log(n) + m) -> O(m*n*log(n)
-    Thus, the worst case time complexity of the algorithm is O(m*n*log(n)).
+        3. I use push and pop operations on a priority queue, which has a worst case time complexity of  O(log (# of movies matching the prefix)), aka O(log(k)).
+            Current total worst case time complexity: O(m) * O(n) * O (log k) = O(m*n*log(k))
+        4. I then use a while loop to print the movies that have the prefixes, which has a time complexity of O(k*log(k)).
+            Current total worst case time complexity: O(m) * O(n) * O (log n) + O (k * log(k)) -> O(m*n*log(k)
+        5. The second for loop to output the highest rated movies for each prefix is iterated # of prefix times, which is O(m).
+            Current total worst case time complexity: O(m) * O(n) * O (log n) + O (k * log(k)) + O(n) -> O(m*n*log(k)
+        Note: the if-else statements and variable declarations had no effect on the time complexity as they were constant O(1) operations.
+    Thus, the worst case time complexity of the algorithm is O(m*n*log(k)).
 
 */
 
 /*  === PART 3B: SPACE COMPLEXITY ANALYSIS ===
 
-    In part 2, the worst case space complexity of my algorithm was O(n+m), where m is the number of prefixes and n is the number of movies.
-        To break down this conclusion, I will present an explanation of my code.
+    In part 2, the worst case space complexity of my algorithm was O(m+k), where m is the number of prefixes and k is the maximum number of movies beginning with each prefix.
+        To break down this conclusion, I will present an explanation of my code and allocated data structures.
         1. I created a vector to store the highest rated movies of each prefix, which has a maximum space complexity of the maximum number of prefixes: O(m).
             Current total worst case space complexity: O(m)
-        2. I used one multiset/BST to store movies that had the given prefixes that deconstructed at the end of the for loop, which has a maximum space complexity of the maximum number of movies: O(n)
-            Current total worst case space complexity: O(m) + O(n) = O(m+n)
-    Thus, the worst case space complexity of the algorithm is O(n+m).
+        2. I used a priority queue to store movies that had the given prefixes, which has a maximum space complexity of the maximum number of matching movies: O(k)
+            Current total worst case space complexity: O(m) + O(k) = O(m+k)
+    Thus, the worst case space complexity of the algorithm is O(m+k).
 
  */
 
 /*  === PART 3C: TRADEOFFS BETWEEN SPACE AND TIME COMPLEXITY ===
 
-    TODO
+    I designed my algorithm to have both a low worst case space complexity and time complexity.
+    However, I feel that I mainly managed to achieve a low space complexity, as my time complexity was still quite high.
+    The high time complexity is due to the need for iterations over each movie for each prefix. Still, by using a priority queue to store the movies matching the prefixes, I was able to save some time as that runs in O(log(k)).
+    On the other hand, my space complexity is quite low, as the only data structures I use are a vector (O(m)) and a priority queue (O(k)), which are smaller than O(n) in this scenario.
+    
+    When these complexities are compared, it is obvious the space complexity is far more optimized than the time complexity. If my iterations were perhaps replaced by a binary search, the time complexity could be improved.
 
  */
 

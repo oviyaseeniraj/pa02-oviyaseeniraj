@@ -117,11 +117,15 @@ int main(int argc, char **argv)
                     highestRated.at(i-2) = item;
                     max = item.rating;
                 }
+                else if (item.rating == max && item < highestRated.at(i-2))
+                {
+                    highestRated.at(i-2);
+                }
             }
         }
         for (auto mov : prefix)
         {
-            cout << mov.name << ", " << mov.rating << endl;
+            cout << mov.name << ", " << std::fixed << std::setprecision(1) << mov.rating << endl;
         }
 
         if (prefix.empty())

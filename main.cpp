@@ -26,7 +26,7 @@ bool operator==(Movie const &m1, Movie const &m2)
 
 bool operator==(reverseMovie const &m1, reverseMovie const &m2)
 {
-    return false;
+    return (m1.rating == m2.rating);
 }
 
 bool operator<(reverseMovie const &m1, reverseMovie const &m2)
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     for (int i = 2; i < argc; i++)
     {
         double max = -42;
-        set<reverseMovie> prefix;
+        multiset<reverseMovie> prefix;
         string empty = "";
         string prefix1 = empty.append(argv[i]);
         for (auto item : allMovies)

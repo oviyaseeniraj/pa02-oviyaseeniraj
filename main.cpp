@@ -2,7 +2,6 @@
 // Instructor: Diba Mirza
 // Student name: Oviya Seeniraj
 #include <iostream>
-#include <sstream>
 #include <fstream>
 #include <string>
 #include <ctime>
@@ -19,34 +18,34 @@ using namespace std;
 
 bool parseLine(string &line, string &movieName, double &movieRating);
 
-bool operator==(Movie const &m1, Movie const &m2)
+bool operator==(Movies::Movie const &m1, Movies::Movie const &m2)
 {
     return (m1.name == m2.name);
 }
 
-bool operator==(reverseMovie const &m1, reverseMovie const &m2)
-{
-    return (m1.rating == m2.rating);
-}
-
-bool operator<(reverseMovie const &m1, reverseMovie const &m2)
-{
-    return (m1.rating > m2.rating);
-}
-
-bool operator>(reverseMovie const &m1, reverseMovie const &m2)
-{
-    return (m1.rating < m2.rating);
-}
-
-bool operator<(Movie const &m1, Movie const &m2)
+bool operator<(Movies::Movie const &m1, Movies::Movie const &m2)
 {
     return (m1.name < m2.name);
 }
 
-bool operator>(Movie const &m1, Movie const &m2)
+bool operator>(Movies::Movie const &m1, Movies::Movie const &m2)
 {
     return (m1.name > m2.name);
+}
+
+bool operator==(Movies::reverseMovie const &m1, Movies::reverseMovie const &m2)
+{
+    return (m1.rating == m2.rating);
+}
+
+bool operator>(Movies::reverseMovie const &m1, Movies::reverseMovie const &m2)
+{
+    return (m1.rating < m2.rating);
+}
+
+bool operator<(Movies::reverseMovie const &m1, Movies::reverseMovie const &m2)
+{
+    return (m1.rating > m2.rating);
 }
 
 int main(int argc, char **argv)
@@ -67,7 +66,7 @@ int main(int argc, char **argv)
     }
 
     // Create an object of a STL data-structure to store all the movies
-    set<Movie> allMovies;
+    set<Movies::Movie> allMovies;
 
     string line, movieName;
     double movieRating;
@@ -79,7 +78,7 @@ int main(int argc, char **argv)
         // cout << movieName << " has rating " << movieRating << endl;
         // insert elements into your data structure
 
-        Movie m = Movie(movieName, movieRating);
+        Movies::Movie m = Movies::Movie(movieName, movieRating);
         allMovies.insert(m);
     }
 
@@ -99,27 +98,27 @@ int main(int argc, char **argv)
     //  Find all movies that have that prefix and store them in an appropriate data structure
     //  If no movie with that prefix exists print the following message
 
-    vector<Movie> highestRated;
+    vector<Movies::Movie> highestRated;
     for (int i = 2; i < argc; i++)
     {
         double max = -42;
-        multiset<reverseMovie> prefix;
+        multiset<Movies::reverseMovie> prefix;
         string empty = "";
         string prefix1 = empty.append(argv[i]);
         for (auto item : allMovies)
         {
-            highestRated.push_back(Movie("", 0.0));
+            highestRated.push_back(Movies::Movie("", 0.0));
             if (item.name.substr(0, prefix1.length()) == prefix1)
             {
-                prefix.insert(reverseMovie(item.name, item.rating));
+                prefix.insert(Movies::reverseMovie(item.name, item.rating));
                 if (item.rating > max)
                 {
-                    highestRated.at(i-2) = item;
+                    highestRated.at(i - 2) = item;
                     max = item.rating;
                 }
-                else if (item.rating == max && item < highestRated.at(i-2))
+                else if (item.rating == max && item < highestRated.at(i - 2))
                 {
-                    highestRated.at(i-2);
+                    highestRated.at(i - 2);
                 }
             }
         }
@@ -141,10 +140,10 @@ int main(int argc, char **argv)
         if (highestRated.at(i).name != "")
         {
             cout << "Best movie with prefix "
-                << argv[i + 2]
-                << " is: "
-                << highestRated.at(i).name
-                << " with rating " << std::fixed << std::setprecision(1) << highestRated.at(i).rating << endl;
+                 << argv[i + 2]
+                 << " is: "
+                 << highestRated.at(i).name
+                 << " with rating " << std::fixed << std::setprecision(1) << highestRated.at(i).rating << endl;
         }
     }
 
@@ -154,7 +153,43 @@ int main(int argc, char **argv)
     return 0;
 }
 
-/* Add your run time analysis for part 3 of the assignment here as commented block*/
+// RUNTIME ANALYSIS FOR PART 2 FOLLOWS BELOW:
+
+/*  === PART 3A: TIME COMPLEXITY ANALYSIS ===
+
+    In part 2, the worst case time complexity of my algorithm was O(n*m*log(n)), where m is the number of prefixes and n is the number of movies.
+        To break down this conclusion, I will present an explanation of my code.
+        1. To begin with, I wrote an outer for loop that iterated over the prefixes, which was m times, with a worst case time complexity of O(m).
+            Current total worst case time complexity: O(m).
+        2. I then wrote an inner for loop of movie iterations, which happened n times, giving me a worst case time complexity of O(n).
+            Current total worst case time complexity: O(m) * O(n) = O(m*n).
+        3. I then use an insertion operation of movies into a multiset, which has a worst case time complexity of  O(log n).
+            Current total worst case time complexity: O(m) * O(n) * O (log n) = O(m*n*log(n))
+        4. I compare strings a maximum of m times when printing the highest rated movie, which has a worst case time complexity of O(m).
+            Current total worst case time complexity: O(m) * O(n) * O (log n) + O (m) = O(m*n*log(n) + m) -> O(m*n*log(n)
+    Thus, the worst case time complexity of the algorithm is O(m*n*log(n)).
+
+*/
+
+
+/*  === PART 3B: SPACE COMPLEXITY ANALYSIS ===
+
+    In part 2, the worst case space complexity of my algorithm was O(n+m), where m is the number of prefixes and n is the number of movies.
+        To break down this conclusion, I will present an explanation of my code.
+        1. I created a vector to store the highest rated movies of each prefix, which has a maximum space complexity of the maximum number of prefixes: O(m).
+            Current total worst case space complexity: O(m)
+        2. I used one multiset/BST to store movies that had the given prefixes that deconstructed at the end of the for loop, which has a maximum space complexity of the maximum number of movies: O(n)
+            Current total worst case space complexity: O(m) + O(n) = O(m+n)
+    Thus, the worst case space complexity of the algorithm is O(n+m).
+
+ */
+
+
+/*  === PART 3C: TRADEOFFS BETWEEN SPACE AND TIME COMPLEXITY ===
+
+    TODO
+
+ */
 
 bool parseLine(string &line, string &movieName, double &movieRating)
 {

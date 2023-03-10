@@ -13,7 +13,6 @@ struct Movie
    string name;
    double rating;
    Movie(string name1 = "", double rating1 = 0.0):name(name1), rating(rating1){}
-   Movie(double rating1 = 0.0, string name1 = ""): rating(rating1), name(name1){}
 };
 
 struct reverseMovie

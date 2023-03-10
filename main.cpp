@@ -108,7 +108,7 @@ int main(int argc, char **argv)
         string prefix1 = empty.append(argv[i]);
         for (auto item : allMovies)
         {
-            highestRated.push_back(Movie(0.0, ""));
+            highestRated.push_back(Movie("", 0.0));
             if (item.name.substr(0, prefix1.length()) == prefix1)
             {
                 prefix.insert(reverseMovie(item.name, item.rating));
@@ -165,7 +165,7 @@ bool parseLine(string &line, string &movieName, double &movieRating)
     bool flag = false;
     movieName = tempRating = "", movieRating = 0.0, flag = false;
 
-    for (int i = 0; i < line.length(); i++)
+    for (int i = 0; i < int(line.length()); i++)
     {
         if (flag)
             tempRating += line[i];

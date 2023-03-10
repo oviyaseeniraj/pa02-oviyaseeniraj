@@ -40,12 +40,12 @@ bool operator==(Movies::reverseMovie const &m1, Movies::reverseMovie const &m2)
 
 bool operator>(Movies::reverseMovie const &m1, Movies::reverseMovie const &m2)
 {
-    return (m1.rating < m2.rating);
+    return (m1.rating > m2.rating);
 }
 
 bool operator<(Movies::reverseMovie const &m1, Movies::reverseMovie const &m2)
 {
-    return (m1.rating > m2.rating);
+    return (m1.rating < m2.rating);
 }
 
 int main(int argc, char **argv)
@@ -98,37 +98,48 @@ int main(int argc, char **argv)
     //  Find all movies that have that prefix and store them in an appropriate data structure
     //  If no movie with that prefix exists print the following message
 
-    vector<Movies::Movie> highestRated;
+    vector<Movies::Movie> highestRated(argc - 2);
+    priority_queue<Movies::reverseMovie> prefix;
     for (int i = 2; i < argc; i++)
     {
         double max = -42;
-        multiset<Movies::reverseMovie> prefix;
+        // multiset<Movies::reverseMovie> prefix;
         string prefix1 = argv[i];
         for (auto item : allMovies)
         {
             if (item.name.length() >= prefix1.length() && item.name.substr(0, prefix1.length()) == prefix1)
             {
-                prefix.insert(Movies::reverseMovie(item.name, item.rating));
+                // prefix.insert(Movies::reverseMovie(item.name, item.rating));
+                prefix.push(Movies::reverseMovie(item.name, item.rating));
                 highestRated.push_back(Movies::Movie("", 0.0));
                 if (item.rating > max)
                 {
-                    highestRated.at(i - 2) = item;
+                    highestRated[i - 2] = item;
                     max = item.rating;
                 }
-                else if (item.rating == max && item < highestRated.at(i - 2))
-                {
-                    highestRated.at(i - 2);
-                }
+                // else if (item.rating == max && item < highestRated.at(i - 2))
+                // {
+                //     highestRated[i - 2] = item;
+                // }
             }
         }
-        for (auto mov : prefix)
-        {
-            cout << mov.name << ", " << std::fixed << std::setprecision(1) << mov.rating << endl;
-        }
+        // for (auto mov : prefix)
+        // {
+        //     cout << mov.name << ", " << std::fixed << std::setprecision(1) << mov.rating << endl;
+        // }
 
         if (prefix.empty())
         {
             cout << "No movies found with prefix " << prefix1 << endl;
+        }
+        else
+        {
+            while (!prefix.empty())
+            {
+                Movies::reverseMovie mov = prefix.top();
+                cout << mov.name << ", " << std::fixed << std::setprecision(1) << mov.rating << endl;
+                prefix.pop();
+            }
         }
 
         cout << endl;
@@ -136,13 +147,13 @@ int main(int argc, char **argv)
 
     for (int i = 0; i < argc - 2; i++)
     {
-        if (highestRated.at(i).name != "")
+        if (highestRated[i].name != "")
         {
             cout << "Best movie with prefix "
                  << argv[i + 2]
                  << " is: "
                  << highestRated.at(i).name
-                 << " with rating " << std::fixed << std::setprecision(1) << highestRated.at(i).rating << endl;
+                 << " with rating " << std::fixed << std::setprecision(1) << highestRated[i].rating << endl;
         }
     }
 
@@ -170,7 +181,6 @@ int main(int argc, char **argv)
 
 */
 
-
 /*  === PART 3B: SPACE COMPLEXITY ANALYSIS ===
 
     In part 2, the worst case space complexity of my algorithm was O(n+m), where m is the number of prefixes and n is the number of movies.
@@ -182,7 +192,6 @@ int main(int argc, char **argv)
     Thus, the worst case space complexity of the algorithm is O(n+m).
 
  */
-
 
 /*  === PART 3C: TRADEOFFS BETWEEN SPACE AND TIME COMPLEXITY ===
 
